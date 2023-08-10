@@ -1,0 +1,35 @@
+
+[Run]
+kin:Kin IIa
+number:experiment(run)
+type:Cosmics
+
+[beam]
+IHWP:
+
+[coda]
+edtmrate:10
+ps:ps3=0
+ps1:-1
+ps2:-1
+ps3:0
+ps4:-1
+ps5:-1
+ps6:-1
+
+[comment]
+text:Cosmics
+
+[hms]
+p:0.0
+theta:54.96
+
+[radiator]
+status:OUT
+
+[shms]
+p:0
+theta:12.18
+
+[target]
+type:LD2 10cm
