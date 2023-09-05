@@ -1,0 +1,14 @@
+#!/bin/bash
+
+RunNumFile=/home/coda/coda/datafile/rcRunNumber
+RunNum=`cat $RunNumFile`
+
+SCRIPT_DIR=/home/cdaq/rcdb/hallcdb/scripts
+DAQ_SESSION="NPS"
+RunLogFile=/home/coda/coda/cool/${DAQ_SESSION}/ddb/run-log/${DAQ_SESSION}/current_run.log
+
+if [[ -z "$RCDB_CONNECTION" ]]; then
+    source ${SCRIPT_DIR}/../setup.sh
+fi    
+
+python3 ${SCRIPT_DIR}/run_end.py ${RunLogFile} --run=${RunNum}
