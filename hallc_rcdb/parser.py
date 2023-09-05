@@ -8,23 +8,31 @@ from datetime import datetime
 from rcdb.log_format import BraceMessage as Lf
 from hallc_rcdb import HallCconditions
 
-log = logging.getLogger("hallcdb.parser")
+log = logging.getLogger("hallc.rcdb")
 log.addHandler(logging.NullHandler())
 
 class EpicsParseResult(object):
     def __init__(self):
         self.beam_energy = None        # Beam Energy
-        self.target = None             # Target BDS value
+        self.target = None             # Target name
+        self.target_enc = None         # Target Encoder Positions
         self.hms_angle = None          # HMS angle 
         self.shms_angle = None         # SHMS angle         
         self.nps_angle = None          # NPS angle 
         self.beam_current = None       # Beam Current
+        self.hwien = None              # HWien angle
+        self.vwien = None              # VWien angle
+        self.helicity_freq = None      # Helicity frequency
 
 class CodaParseResult(object):
     def __init__(self):
         self.session_name = None
         self.config = None
         self.runnumber = None
+        self.out_file = None
+        self.start_time = None
+        self.end_time = None
+        self.total_evt = None
 
 """
 class GUIParseResult(object):
@@ -84,6 +92,31 @@ def coda_parser(session):
     
     return parse_result
 
+def runlog_parser(logfile, coda_parse_result):
+    # coda run-log xml file parser
+
+    xml_root = Et.parse(logfile).getroot()
+    if xml_root.tag == 'coda':
+        if "runtype" in xml_root.attrib:
+            coda_parse_result.config = xml_root.attrib["runtype"]
+        if "session" in xml_root.attrib:
+            coda_parse_result.session_name = xml_root.attrib["session"]
+        
+    # run-start log
+    xml_result = xml_root.find("run-start")
+    if xml_result is None:
+        return
+
+    coda_parse_result.runnumber = xml_root.find("run-start").find("run-number").text
+    coda_parse_result.start_time = xml_root.find("run-start").find("start-time").text
+    coda_parse_result.out_file = xml_root.find("run-start").find("out-file").text
+    
+    # end-run log
+    xml_result = xml_root.find("run-end")
+    if xml_result is None:
+        return
+    coda_parse_result.end_time = xml_root.find("run-end").find("end-time").text
+    coda_parse_result.total_evt = xml_root.find("run-end").find("total-evt").text
 
 def runinfo_parser(runinfo_file):
     # parse info from a run start gui output file

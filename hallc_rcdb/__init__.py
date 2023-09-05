@@ -8,11 +8,16 @@ class HallCconditions(object):
     EXPERIMENT = "experiment"
     BEAM_ENERGY = "beam_energy"
     TARGET = "target"
+    TARGET_ENC = "target_enc"
     BEAM_CURRENT = "beam_current"
     TOTAL_CHARGE = "total_charge"
     HMS_ANGLE = "hms_angle"
     SHMS_ANGLE = "shms_angle"
     NPS_ANGLE = "nps_angle"
+    HWIEN = "hwien"
+    VWIEN = "vwien"
+    HELICITY_FREQ = "helicity_freq"
+    FLIP_STATE = "flip_state"
     
 def create_condition_types(db):
     """
