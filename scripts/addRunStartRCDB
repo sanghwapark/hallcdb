@@ -1,6 +1,12 @@
 #!/bin/bash
 
-RunNum=$1
+RunNumTemp=$1
+
+# Quick and dirty way to put correct new run number
+# This is because the new run number doesn't set at the prestart stage
+# while this script is executed at prestart
+RunNum=$(($RunNumTemp +1))
+
 Session=$2
 
 SCRIPT_DIR=/home/cdaq/rcdb/hallcdb/scripts
@@ -12,4 +18,3 @@ fi
 # Run the script 
 python3 ${SCRIPT_DIR}/run_start.py --run=${RunNum} --daq=${Session} --update=epics,coda --reason=start
 #python3 ${SCRIPT_DIR}/run_start.py --run=${RunNum} --daq=${Session} --update=epics,coda --reason=start --test=True
-
