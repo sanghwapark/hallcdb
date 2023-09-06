@@ -32,9 +32,8 @@ def main():
 
     # parse args
     argparser = argparse.ArgumentParser(description=" Update Hall C RCDB", usage=get_usage())
-    argparser.add_argument("run_log_file", type=str, help="full path to coda run-log output file")
     argparser.add_argument("--run", type=int, help="Run number to update", required=True)
-    argparser.add_argument("--daq",  help="DAQ session: NPS, COIN", required=True)
+    argparser.add_argument("--daq",  help="DAQ session: NPS, HMS, SHMS", required=True)
     argparser.add_argument("--update", help="Comma separated, modules to update such as coda, epics", default="coda,epics")
     argparser.add_argument("--reason", help="Reason for the update: start, update, end", default="start")
     argparser.add_argument("--exp", help="Experiment name", default="NPS")
@@ -94,50 +93,41 @@ def main():
         conditions.append(("nps_angle", nps_angle))
                 
     # parse coda info
-    time_start = None
     if "coda" in update_parts:
-        run_log_file = args.run_log_file
-        if run_log_file:
-            try:
-                coda_parse_result = CodaParseResult()
-                this_session = str(args.daq)
-                log.debug(Lf("Adding coda conditions to DB", ))
-                parser.runlog_parser(run_log_file, coda_parse_result)
-
-                if coda_parse_result.runnumber is None or int(coda_parse_result.runnumber) != int(run_num):
-                    log.warn("ERROR: Coda parser run number mismatch. Skip coda update\n")
-                else:
-                    conditions.append((rcdb.DefaultConditions.SESSION, coda_parse_result.session_name))
-                    conditions.append((rcdb.DefaultConditions.RUN_CONFIG, coda_parse_result.config))
-                    time_start = coda_parse_result.start_time
-            except Exception as ex:
-                log.warn("coda run log parser failed.\n" + str(ex))
-                
+        try:
+            coda_parse_result = CodaParseResult()
+            this_session = str(args.daq)
+            log.debug(Lf("Adding coda conditions to DB", ))
+            parser.coda_parser(this_session, coda_parse_result)
+            if coda_parse_result.runnumber is None or int(coda_parse_result.runnumber) != int(run_num):
+                log.warn("ERROR: Coda parser run number mismatch. Skip coda update\n")
+            else:
+                conditions.append((rcdb.DefaultConditions.SESSION, coda_parse_result.session_name))
+                conditions.append((rcdb.DefaultConditions.RUN_CONFIG, coda_parse_result.config))
+        except Exception as ex:
+            log.warn("coda run log parser failed.\n" + str(ex))
 
     ######  UPDATE  ######
     if args.test:
-        print("Run start time:\t %s" % time_start)
         print(conditions)
-
     else:
-        run = db.get_run(run_num)
-        if not run:
-            run = db.create_run(run_num)
+        try:
+            run = db.get_run(run_num)
+            if not run:
+                run = db.create_run(run_num)
 
-        if time_start is not None:
-            run.start_time = datetime.strptime(time_start, "%m/%d/%y %H:%M:%S")
-        else:
+            # Update the DB
             run.start_time = time_now
-
-        # Update the DB
-        db.add_conditions(run, conditions, replace=True)    
-        db.session.commit()
+            db.add_conditions(run, conditions, replace=True)    
+            db.session.commit()
+        except Exception as ex:
+            log.warn("fail to update RCDB\n" + str(ex))
 
 def get_usage():
     return """
     
     Usage:
-    python3 run_start.py --run=<run number> --session=[HMS,SHMS,NPS,COIN] -c <db_connection string> --update=[coda,epics] --reason=[start,update,end] --exp=NPS
+    python3 run_start.py --run=<run number> --session=[HMS,SHMS,NPS] -c <db_connection string> --update=[coda,epics] --reason=[start,update,end] --exp=NPS
 
     Examples:
     Update epics info only, at the start of run

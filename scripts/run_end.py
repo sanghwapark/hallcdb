@@ -35,17 +35,19 @@ def end_run_update(run_number, logfile):
         log.info(Lf("run_end: Run '{}' is not found in DB.", run_number))
         return
 
+    # Wait for 5 sec for the daq run-log to be written at end of run
+    time.sleep(5)
+
+    # Parse information from coda run-log
     parse_result = CodaParseResult()
     runlog_parser(logfile, parse_result)
-    if parse_result.runnumber != run_number:
+    if parse_result.runnumber != run_number or parse_result.end_time is None:
         log.info(Lf("run_end: Run number mismatch in run-log file, run '{}'", run_number))
-        return
-        
-    # Run end time
-    if parse_result.end_time is None:
         run.end_time = time_now
-    else: 
-        run.end_time = datetime.strptime(parse_result.end_time, "%m/%d/%y %H:%M:%S")
+    else:        
+        run.end_time = datetime.strptime(parse_result.end_time, "%m/%d/%y %H:%M:%S")        
+        # Also update start time
+        run.start_time = datetime.strptime(parse_result.start_time, "%m/%d/%y %H:%M:%S")        
 
     # Estimate total run time
     total_run_time = -1
@@ -58,7 +60,7 @@ def end_run_update(run_number, logfile):
         nevts = int(parse_result.total_evt)
         
     event_rate = -1
-    if float(total_run_time) > 0:
+    if nevts > -1 and float(total_run_time) > 0:
         event_rate = float(nevts) / float(total_run_time)
 
     # Estimate total charge based on average bean current delivered

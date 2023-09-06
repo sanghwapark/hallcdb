@@ -33,6 +33,7 @@ class CodaParseResult(object):
         self.start_time = None
         self.end_time = None
         self.total_evt = None
+        self.blocklevel = None
 
 """
 class GUIParseResult(object):
@@ -56,9 +57,7 @@ def epics_parser(epics_list):
             continue
     return parse_result
 
-def coda_parser(session):
-
-    parse_result = CodaParseResult()
+def coda_parser(session, parse_result):
 
     # default paths
     #runtyp_file = "/home/coda/coda/datafile/actRunType"
@@ -88,9 +87,48 @@ def coda_parser(session):
     
     parse_result.session_name = xml_root.find("session").find("name").text
     parse_result.config = xml_root.find("session").find("config").text
+
     parse_result.runnumber = int(xml_root.find("session").find("runnumber").text)
     
+    # get blocklevel
+    logfile = "/home/coda/coda/config_files/" + session + "/default.flags"    
+    parse_result.blocklevel = get_blocklevel(logfile)
+
     return parse_result
+
+def npsvmelog_parser(coda_parse_result):
+    logfile = "/home/coda/coda/scripts/EPICS_logging/Sessions/NPS/nps-vme1.dat"
+
+    with open(logfile, "r") as f:
+        for line in [x.strip() for x in f.readlines()]:
+            if "Runnumber" in line:
+                coda_parse_result.runnumber = line.split(None)[2]
+            elif "configtype" in line:
+                coda_parse_result.config = line.split("=")[1]
+            else:
+                continue
+    
+    coda_parse_result.session_name = "NPS"
+
+    # get blocklevel from coda-flags file
+    logfile = "/home/coda/coda/config_files/" + session + "default.flags"    
+    coda_parse_result.blocklevel = get_blocklevel(logfile)
+
+    return coda_parse_result
+    
+def get_blocklevel(logfile):
+    flag_info = {}
+    with open(logfile, "r") as f:
+        for line in [x.strip() for x in f.readlines()]:
+            if ";" in line:
+                continue
+            if "blocklevel" in line:
+                for item in line.split(","):
+                    if "=" in item:
+                        this_info = item.split("=")
+                        flag_info[this_info[0]] = int(this_info[1])
+                    
+    return flag_info["blocklevel"]
 
 def runlog_parser(logfile, coda_parse_result):
     # coda run-log xml file parser

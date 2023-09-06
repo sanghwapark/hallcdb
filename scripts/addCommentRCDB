@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#RunNum=$1
+#GUI_OUTPUT=$2
+
+RunNum=$1
+RunType=$2
+RunComment=$3
+
+SCRIPT_DIR=/home/cdaq/rcdb/hallcdb/scripts
+
+if [[ -z "$RCDB_CONNECTION" ]]; then
+   source ${SCRIPT_DIR}/../setup.sh
+fi
+
+#python3 $SCRIPT_DIR/gui_update.py $RunNum $GUI_OUTPUT
+python3 $SCRIPT_DIR/gui_update.py $RunNum $RunType $RunComment
