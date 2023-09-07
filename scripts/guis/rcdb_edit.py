@@ -113,6 +113,7 @@ class RCDB_EDIT(Gtk.Window):
         fixed.put(self.rbutton2, 180, 410)
         fixed.put(self.rbutton3, 270, 410)
         fixed.put(self.rbutton4, 330, 410)
+
         # Save and exit
         ok_button = Gtk.Button("SAVE")
         ok_button.connect("clicked", self.on_ok_clicked, self.entry1)
@@ -132,15 +133,15 @@ class RCDB_EDIT(Gtk.Window):
         if self.myDBTool is not None:
             if self.run_type_selected is not None:
                 print ("New run type:", self.run_type_selected)
-                self.myDBTool.save_new_run_type(runnum, self.run_type_selected)
+                self.myDBTool.save_new_condition(runnum, "run_type", self.run_type_selected)
             if self.run_flag_selected is not None:
                 print ("New run flag:", self.run_flag_selected)
-                self.myDBTool.save_new_run_flag(runnum, self.run_flag_selected)
+                self.myDBTool.save_new_condition(runnum, "run_flag", self.run_flag_selected)
             if self.user_comment_selected is not None:
                 buf = self.textbuffer
                 comment = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), True)
                 print ("New user comment:", comment)
-                self.myDBTool.save_new_user_comment(runnum, comment)
+                self.myDBTool.save_new_condition(runnum, "user_comment", comment)
         else:
             print ("DB connection failed?")
         Gtk.main_quit()
@@ -235,33 +236,25 @@ class DBTool(object):
                 print ("Info: no initial user_comment available in DB")
         return read_ok
 
-    def save_new_run_type(self, runnum, new_run_type):
+    def save_new_condition(self, runnum, key, val):
         if not self.is_connected:
             print ("ERROR: No DB connection?????")
             return
-        if runnum != self.run_number:
-            print ("Run Number mismatch! Check run number again!")
-        else:
-            self.db.add_condition(self.run, "run_type", new_run_type, True)
-            print ("Saved to DB")
 
-    def save_new_run_flag(self, runnum, new_run_flag):
-        if not self.is_connected:
-            print ("ERROR: No DB connection?????")
+        if runnum != self.run_number:
+            print ("ERROR: Run Number mismatch! Check run number again!")
             return
-        if runnum != self.run_number:
-            print ("Run Number mismatch! Check run number again!")
-        else:
-            self.db.add_condition(self.run, "run_flag", new_run_flag, True)
+        try:
+            self.db.add_condition(self.run, key, val, True)
+            print("Saved to DB: %s %s" % (key, str(val)))
+        except Exception as ex:
+            print("ERROR: fail to update the DB, %s" % key)
+        return
 
-    def save_new_user_comment(self, runnum, new_user_comment):
-        if not self.is_connected:
-            print ("ERROR: No DB Connection?????")
-        if runnum != self.run_number:
-            print ("Warning: Run Number mismatch! Check run number again!")
-        else:
-            self.db.add_condition(self.run, "user_comment", new_user_comment, True)
 
+#--------------------
+# Main program
+#--------------------
 win = RCDB_EDIT()
 win.connect("destroy", Gtk.main_quit)
 win.show_all()
