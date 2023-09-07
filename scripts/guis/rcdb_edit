@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# sanghwa@jlab.org: 09.07.2023
+# Wrapper for RCDB user edit GUI
+
+HALLCDB_DIR=/home/cdaq/rcdb/hallcdb
+
+if [[ -z "$RCDB_CONNECTION" ]]; then
+   source ${HALLCDB_DIR}/setup.sh
+fi
+
+python3 ${HALLCDB_DIR}/scripts/guis/rcdb_edit.py &
