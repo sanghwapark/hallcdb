@@ -99,11 +99,16 @@ def main():
             this_session = str(args.daq)
             log.debug(Lf("Adding coda conditions to DB", ))
             parser.coda_parser(this_session, coda_parse_result)
-            if coda_parse_result.runnumber is None or int(coda_parse_result.runnumber) != int(run_num):
-                log.warn("ERROR: Coda parser run number mismatch. Skip coda update\n")
-            else:
-                conditions.append((rcdb.DefaultConditions.SESSION, coda_parse_result.session_name))
-                conditions.append((rcdb.DefaultConditions.RUN_CONFIG, coda_parse_result.config))
+            if coda_parse_result.runnumber is None:
+                log.warn("ERROR: Coda parser run number mismatch.\n")
+                # use user input runnumber
+                coda_parse_result.runnumber = run_num
+
+            if int(coda_parse_result.runnumber) != int(run_num):
+                run_num = int(coda_parse_result.runnumber)
+
+            conditions.append((rcdb.DefaultConditions.SESSION, coda_parse_result.session_name))
+            conditions.append((rcdb.DefaultConditions.RUN_CONFIG, coda_parse_result.config))
         except Exception as ex:
             log.warn("coda run log parser failed.\n" + str(ex))
 

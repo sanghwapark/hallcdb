@@ -130,6 +130,10 @@ def get_blocklevel(logfile):
                     
     return flag_info["blocklevel"]
 
+def prevlog_parser(logfile, coda_parse_result):
+    # try previous run log
+    runlog_parser(logfile, coda_parse_result)
+
 def runlog_parser(logfile, coda_parse_result):
     # coda run-log xml file parser
 

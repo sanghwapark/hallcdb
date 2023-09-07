@@ -35,14 +35,20 @@ def end_run_update(run_number, logfile):
         log.info(Lf("run_end: Run '{}' is not found in DB.", run_number))
         return
 
-    # Wait for 5 sec for the daq run-log to be written at end of run
-    time.sleep(5)
+    # Wait for 4 sec for the daq run-log to be written at end of run
+    time.sleep(4)
 
     # Parse information from coda run-log
     parse_result = CodaParseResult()
     runlog_parser(logfile, parse_result)
     if parse_result.runnumber != run_number or parse_result.end_time is None:
         log.info(Lf("run_end: Run number mismatch in run-log file, run '{}'", run_number))
+
+        # FIXME: need to set the file according to the session name
+        #prelog_file = "/home/coda/coda/cool/NPS/ddb/run-log/NPS/previous_run.log"
+        # give it one more try with previous log
+        #prevlog_parser(prelog_file, parse_result)
+
         run.end_time = time_now
     else:        
         run.end_time = datetime.strptime(parse_result.end_time, "%m/%d/%y %H:%M:%S")        
