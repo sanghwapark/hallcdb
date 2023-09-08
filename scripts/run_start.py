@@ -12,7 +12,6 @@ from hallc_rcdb.parser import CodaParseResult, EpicsParseResult
 epics_list = {
     "HALLC:p":HallCconditions.BEAM_ENERGY,
     "HALL_C_TARGET":HallCconditions.TARGET,
-#    "hcBDSPOS":HallCconditions.TARGET_ENC,
     "ibcm1":HallCconditions.BEAM_CURRENT,
     "ecSHMS_Angle":HallCconditions.SHMS_ANGLE,
     "ecHMS_Angle":HallCconditions.HMS_ANGLE,
@@ -111,6 +110,8 @@ def main():
             conditions.append((rcdb.DefaultConditions.RUN_CONFIG, coda_parse_result.config))
         except Exception as ex:
             log.warn("coda run log parser failed.\n" + str(ex))
+            db.add_log_record("", 
+                              "Start of run: coda parser failed", run_num)
 
     ######  UPDATE  ######
     if args.test:
@@ -125,6 +126,7 @@ def main():
             run.start_time = time_now
             db.add_conditions(run, conditions, replace=True)    
             db.session.commit()
+            db.add_log_record("", "Start of run update", run_num)
         except Exception as ex:
             log.warn("fail to update RCDB\n" + str(ex))
 

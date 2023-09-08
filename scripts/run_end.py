@@ -70,13 +70,16 @@ def end_run_update(run_number, logfile):
         event_rate = float(nevts) / float(total_run_time)
 
     # Estimate total charge based on average bean current delivered
+    # Skip this now, myStats not available from coda@cdaql6
+    """
     charge = 0
     avg_current = helper.get_epics_avg(run, "ibcm1", 0, 100)
     if avg_current is not None:
         charge = float(total_run_time) * float(avg_current)
     else:
         avg_current = 0 # set to 0
-        
+    """        
+
     # Add conditions to update
     conditions = []
     if nevts > 0:
@@ -84,8 +87,8 @@ def end_run_update(run_number, logfile):
     if event_rate > 0:
         conditions.append((rcdb.DefaultConditions.EVENT_RATE, event_rate))
 
-    conditions.append(("beam_current", avg_current))
-    conditions.append(("total_charge", charge))
+    #conditions.append(("beam_current", avg_current))
+    #conditions.append(("total_charge", charge))
 
     if TEST_MODE:
         print("Run Start Time:\t %s" % run.start_time)
@@ -93,8 +96,8 @@ def end_run_update(run_number, logfile):
         print("Run length:\t %f" % (float(total_run_time)))
         print("Total event counts %d" % (int(nevts)))
         print("Event rate %.2f" % (float(event_rate)))
-        print("Avg. beam current:\t %.2f" % (float(avg_current)))
-        print("Total charge:\t %.2f" % (float(charge)))
+        #print("Avg. beam current:\t %.2f" % (float(avg_current)))
+        #print("Total charge:\t %.2f" % (float(charge)))
     else:
         conditions.append((rcdb.DefaultConditions.IS_VALID_RUN_END, True))
 
