@@ -51,7 +51,7 @@ def epics_parser(epics_list):
             cmds = ['caget', '-t', epics_name]
             out_str = subprocess.Popen(cmds, stdout=subprocess.PIPE).stdout.read().strip()
             value = out_str.decode('ascii')
-            parse_result[cond_name] = float(value)
+            parse_result[cond_name] = value
         except Exception as ex:
             log.warning("Error: " + str(ex))
             continue
