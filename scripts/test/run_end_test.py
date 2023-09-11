@@ -15,7 +15,7 @@ log = logging.getLogger("hallc.rcdb")
 log.addHandler(logging.StreamHandler(sys.stdout))
 log.setLevel(logging.DEBUG)
 
-TEST_MODE = False
+TEST_MODE = True
 
 def end_run_update(run_num, logfile):
     

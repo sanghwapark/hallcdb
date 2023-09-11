@@ -4,6 +4,8 @@ import xml.etree.ElementTree as Et
 from subprocess import check_output
 import subprocess
 from datetime import datetime
+from glob import glob
+import shutil
 
 from rcdb.log_format import BraceMessage as Lf
 from hallc_rcdb import HallCconditions
@@ -175,3 +177,4 @@ def runinfo_parser(runinfo_file):
                 runinfo[subj][group] = var
 
     return runinfo
+
