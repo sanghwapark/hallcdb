@@ -20,7 +20,7 @@ class RCDB_EDIT(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="RCDB Edit")
 
-        self.set_size_request(350,460)
+        self.set_size_request(350,600)
         self.timeout_id = None
         self.set_border_width(10)
 
@@ -51,6 +51,8 @@ class RCDB_EDIT(Gtk.Window):
                      "Commission", 
                      "Cosmics", 
                      "Spot++", 
+                     "LED",
+                     "Elastic",
                      "Optics", 
                      "Junk",
                      "Other"]
@@ -71,23 +73,23 @@ class RCDB_EDIT(Gtk.Window):
 
         #### USER COMMENT ####
         lbl3 = Gtk.Label("User Comment:")
-        fixed.put(lbl3, 25, 315)
+        fixed.put(lbl3, 25, 400)
         hbox = Gtk.HBox()
         scrolledwindow = Gtk.ScrolledWindow()
         scrolledwindow.set_hexpand(True)
         scrolledwindow.set_vexpand(True)
-        scrolledwindow.set_size_request(350, 50)
+        scrolledwindow.set_size_request(350, 30)
 
         comment_text = Gtk.TextView()
         self.textbuffer = comment_text.get_buffer()
         self.textbuffer.set_text("")
         scrolledwindow.add(comment_text)
         hbox.pack_start(scrolledwindow, True, True, 1)
-        fixed.put(hbox, 25, 340)
+        fixed.put(hbox, 25, 420)
 
         #### RUN FLAG ###
         lbl4 = Gtk.Label("Run Flag:")
-        fixed.put(lbl4, 25, 410)
+        fixed.put(lbl4, 25, 480)
 
         #hidden for the inital value
         self.rbutton0 = Gtk.RadioButton.new_with_label_from_widget(None, "None")
@@ -109,10 +111,10 @@ class RCDB_EDIT(Gtk.Window):
         self.rbutton4.set_label("Suspicous")
         self.rbutton4.connect("toggled", self.on_rbutton_toggled, "Suspicious")
 
-        fixed.put(self.rbutton1, 110, 410)
-        fixed.put(self.rbutton2, 180, 410)
-        fixed.put(self.rbutton3, 270, 410)
-        fixed.put(self.rbutton4, 330, 410)
+        fixed.put(self.rbutton1, 110, 480)
+        fixed.put(self.rbutton2, 180, 480)
+        fixed.put(self.rbutton3, 270, 480)
+        fixed.put(self.rbutton4, 330, 480)
 
         # Save and exit
         ok_button = Gtk.Button("SAVE")
@@ -123,8 +125,8 @@ class RCDB_EDIT(Gtk.Window):
         cancel_button.connect("clicked", self.on_cancel_clicked)
         cancel_button.set_size_request(160, 10)
 
-        fixed.put(ok_button, 50, 445)
-        fixed.put(cancel_button, 220, 445)
+        fixed.put(ok_button, 50, 520)
+        fixed.put(cancel_button, 220, 520)
 
         self.add(fixed)
 
@@ -144,7 +146,7 @@ class RCDB_EDIT(Gtk.Window):
                 self.myDBTool.save_new_condition(runnum, "user_comment", comment)
         else:
             print ("DB connection failed?")
-        Gtk.main_quit()
+        #Gtk.main_quit()
 
     def on_cancel_clicked(self, widget):
         Gtk.main_quit()

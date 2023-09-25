@@ -17,9 +17,10 @@ log.setLevel(logging.DEBUG)
 
 TEST_MODE = False
 
-def end_run_update(run_num, logfile):
+def end_run_update(logfile):
     
-    time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    #time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    time_now = datetime.now()
 
     # for the log
     script_start_clock = time.clock()
@@ -29,15 +30,16 @@ def end_run_update(run_num, logfile):
         if "RCDB_CONNECTION" in os.environ.keys() \
         else "mysql://rcdb@cdaqdb1.jlab.org/c-rcdb"
 
-    # Wait for 3 sec for the daq run-log to be written at end of run
-    time.sleep(3)
+    # Wait for 2 sec for the daq run-log to be written at end of run
+    # time.sleep(2)
 
     # Parse information from coda run-log
     parse_result = logparser.parse_file(logfile)
 
+    run_num = parse_result.run_number
     # To be safe, parse previous log as well
-    prev_log_file = logfile.split("current")[0] + "previous_run.log"
-    parse_result2 = logparser.parse_file(prev_log_file)
+    #prev_log_file = logfile.split("current")[0] + "previous_run.log"
+    #parse_result2 = logparser.parse_file(prev_log_file)
 
     db = rcdb.RCDBProvider(con_str)
     run = db.get_run(run_num)
@@ -48,11 +50,15 @@ def end_run_update(run_num, logfile):
     def updateDB(result, run):
         # Run end time
         if result.end_time is None:
-            run.end_time = time_now
+            if result.update_time is None:
+                run.end_time = time_now
+            else:
+                # use last update time
+                run.end_time = datetime.strptime(result.update_time, "%m/%d/%y %H:%M:%S")
         else:
             run.end_time = datetime.strptime(result.end_time, "%m/%d/%y %H:%M:%S")        
             # Also update start time
-            #run.start_time = datetime.strptime(result.start_time, "%m/%d/%y %H:%M:%S")        
+            run.start_time = datetime.strptime(result.start_time, "%m/%d/%y %H:%M:%S")        
 
         # Estimate total run time
         total_run_time = -1
@@ -68,7 +74,8 @@ def end_run_update(run_num, logfile):
                 event_rate = float(result.event_count) / float(total_run_time)
                 conditions.append((rcdb.DefaultConditions.EVENT_RATE, event_rate))
 
-        conditions.append((rcdb.DefaultConditions.IS_VALID_RUN_END, result.has_run_end))
+        #conditions.append((rcdb.DefaultConditions.IS_VALID_RUN_END, result.has_run_end))
+        conditions.append((rcdb.DefaultConditions.IS_VALID_RUN_END, True))
 
         # Estimate total charge based on average bean current delivered
         # Skip this now, myStats not available from coda@cdaql6
@@ -101,19 +108,22 @@ def end_run_update(run_num, logfile):
                                       time.time() - script_start_time,
                                       datetime.now()), run_num)
 
+    updateDB(parse_result, run)
+    """
     if run_num == parse_result.run_number:
         updateDB(parse_result, run)
     elif run_num == parse_result2.run_number:
         updateDB(parse_result2, run)
     else:
         print("Run number mismatch", run_num, parse_result.run_number, parse_result2.run_number)
+    """
 
 if __name__== "__main__":
     parser = argparse.ArgumentParser(description="Update HallC RCDB at the end of a run")
     parser.add_argument("runlog_xml_file", type=str, help="full path to coda run-log output file")
-    parser.add_argument("--run", type=str, help="Run number", required=True)
+    #parser.add_argument("--run", type=str, help="Run number", required=True)
 
     args = parser.parse_args()
     logfile = args.runlog_xml_file
-    run_number = args.run
-    end_run_update(run_number, logfile)
+    #run_number = args.run
+    end_run_update(logfile)

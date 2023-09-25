@@ -34,10 +34,9 @@ def update_DB(rnumber, rtype, rcomment):
     # Add condiitons to update
     if rtype is not None:
         db.add_condition(run, rcdb.DefaultConditions.RUN_TYPE, rtype, True)
-    if comment is not None:
-        db.add_condition(run, rcdb.DefaultConditions.USER_COMMENT, comment, True)
+    if rcomment is not None:
+        db.add_condition(run, rcdb.DefaultConditions.USER_COMMENT, rcomment, True)
     db.session.commit()
-
     # Add log
     db.add_log_record("",
                       "Update run type, user_comment: '{}'"
@@ -51,5 +50,5 @@ if __name__=="__main__":
     run_number = sys.argv[1]
     run_type = sys.argv[2]
     run_comment = sys.argv[3]
-    print(run_number, run_type, run_comment)
-    #update_DB(run_number, run_type, run_comment)
+    #print(run_number, run_type, run_comment)
+    update_DB(run_number, run_type, run_comment)

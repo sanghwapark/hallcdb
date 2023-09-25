@@ -36,7 +36,8 @@ class CodaParseResult(object):
         self.end_time = None
         self.total_evt = None
         self.blocklevel = None
-
+        self.prescales = None
+        
 """
 class GUIParseResult(object):
     def __init__(self):
@@ -96,6 +97,9 @@ def coda_parser(session, parse_result):
     logfile = "/home/coda/coda/config_files/" + session + "/default.flags"    
     parse_result.blocklevel = get_blocklevel(logfile)
 
+    # prescales
+    parse_result.prescales = get_prescales(session)
+
     return parse_result
 
 def npsvmelog_parser(coda_parse_result):
@@ -131,6 +135,33 @@ def get_blocklevel(logfile):
                         flag_info[this_info[0]] = int(this_info[1])
                     
     return flag_info["blocklevel"]
+
+def get_prescales(session):
+    flags = parse_flags(session)
+    prescales = {}
+
+    def find_ps(name):
+        for key in flags:
+            if name == key:
+                prescales[name] = flags[name]
+                
+    for ps in ["ps1", "ps2", "ps3", "ps4", "ps5", "ps6"]:
+        find_ps(ps)
+    return prescales
+
+def parse_flags(session):
+    logfile = "/home/coda/coda/config_files/" + session + "/default.flags"        
+    flag_info = {}
+    with open(logfile, "r") as f:
+        for line in [x.strip() for x in f.readlines()]:
+            if ";" in line:
+                continue
+            if "blocklevel" in line:
+                for item in line.split(","):
+                    if "=" in item:
+                        this_info = item.split("=")
+                        flag_info[this_info[0]] = int(this_info[1])
+    return flag_info
 
 def prevlog_parser(logfile, coda_parse_result):
     # try previous run log

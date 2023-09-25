@@ -1,4 +1,5 @@
 import os, sys
+import json
 from datetime import datetime, timedelta
 import argparse
 import logging
@@ -17,7 +18,8 @@ epics_list = {
     "ecHMS_Angle":HallCconditions.HMS_ANGLE,
     "PWF1I06:spinCalc":HallCconditions.HWIEN,
     "PWF1I04:spinCalc":HallCconditions.VWIEN,
-    "HELFREQ":HallCconditions.HELICITY_FREQ
+    "HELFREQ":HallCconditions.HELICITY_FREQ,
+    "ecP_HMS":HallCconditions.HMS_MOMENTUM
 }
 
 def main():
@@ -108,6 +110,7 @@ def main():
 
             conditions.append((rcdb.DefaultConditions.SESSION, coda_parse_result.session_name))
             conditions.append((rcdb.DefaultConditions.RUN_CONFIG, coda_parse_result.config))
+            conditions.append(("prescales", json.dumps(coda_parse_result.prescales)))
         except Exception as ex:
             log.warn("coda run log parser failed.\n" + str(ex))
             db.add_log_record("", 

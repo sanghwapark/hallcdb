@@ -27,8 +27,10 @@ class CodaRunLogParseResult(object):
         self.config = None
         self.start_time = None
         self.end_time = None
+        self.update_time = None
         self.event_count = None
         self.evio_file = None
+        self.has_run_end = False
 
         self.components = None
         self.rtvs = None
@@ -77,12 +79,17 @@ def parse_start_run_data(parse_result, xml_root):
             parse_result.config_file = rtvs[RUN_CONFIG_RTV]
             parse_result.config = os.path.basename(parse_result.config_file)
         """
+    # Update time
+    parse_result.end_time = xml_result.find("update-time").text
+
+    # Event count
+    parse_result.event_count = xml_result.find("total-evt").text
 
 def parse_end_run_data(parse_result, xml_root):
     xml_result = xml_root.find("run-end")
     if xml_result is None:
         return parse_result
-        
+
     # End time
     parse_result.end_time = xml_result.find("end-time").text
     parse_result.has_run_end = True

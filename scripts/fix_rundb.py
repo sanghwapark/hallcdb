@@ -1,6 +1,10 @@
 import os,sys
 import argparse
+from datetime import datetime
+
+import rcdb
 from rcdb.provider import RCDBProvider
+from hallc_rcdb import data_parser
 
 def get_info_from_logfile(run_num, session, lruninfo):
     # Parse information from logfile
@@ -11,24 +15,27 @@ def get_info_from_logfile(run_num, session, lruninfo):
     new_run = int(run_num) -1
     logfile = "/home/coda/debug_logs/" + session + "_logruninfo_" + str(new_run) + ".log"
     
-    try:
-        with open(logfile, "r") as f:
+    def read_file(fname, linfo):
+        with open(fname, "r") as f:
             for line in [x.strip() for x in f.readlines()]:
                 if "Keyword" in line:
                     litem = line.split(",")
                     for item in litem:
                         if "Start_Run_" in item:
                             runnumber = item.split("_Run_")[1]
-                            lruninfo["runnumber"] = runnumber
+                            linfo["runnumber"] = runnumber
                         else:
                             if "=" in item:
                                 key = item.split("=")[0]
                                 val = item.split("=")[1]
-                                lruninfo[str(key)] = val
+                                linfo[str(key)] = val
                     # we are done once we parse the info
-                    break
+                    return linfo
+
+    try:
+        read_file(logfile, lruninfo)
     except Exception as ex:
-        print ("ERROR: Can't find the log file\n")
+        print ("ERROR: Can't find the log file")
         return 1
 
     # Check if the run numbers match
@@ -60,6 +67,17 @@ def update_DB(run_num, session, forceUpdate=False):
             print("If you know what you are doing, run the script with --forceUpdate\n")
             return
 
+    # Get run info from data
+    parse_result = data_parser.get_run_info_from_data(run_num)
+    #if parse_result.start_time:
+    #    run.start__time = parse_result.start_time
+    if parse_result.end_time is not None:
+        print("Parse run end time from data file")
+        run.end_time = parse_result.end_time
+        db.add_condition(run, rcdb.DefaultConditions.IS_VALID_RUN_END, parse_result.has_run_end, True)
+    if parse_result.event_count is not None:
+        db.add_condition(run, "event_count", parse_result.event_count, True)
+        
     runinfo = {}
     runinfo_OK = get_info_from_logfile(run_num, session, runinfo)
     if runinfo_OK == 0:
@@ -67,12 +85,17 @@ def update_DB(run_num, session, forceUpdate=False):
             db.add_condition(run, "run_type", runinfo["Run_type"])
         if runinfo["comment_text"] != "":        
             db.add_condition(run, "user_comment", runinfo["comment_text"])
-
-        db.session.commit()
-        db.add_log_record("","Update with fix_rundb.py", run_num)
-        print("Successfully updated RCDB for run ", run_num)
     else:
         print("Can't get run info from debug_logs: ", run_num)
+
+    print(run.start_time, run.end_time)
+    try:
+        db.session.commit()
+        db.add_log_record("","Update with fix_rundb.py", run_num)
+        print("Updated RCDB for run ", run_num)
+    except Exception as ex:
+        print(str(ex))
+
     return
 
 if __name__=="__main__":

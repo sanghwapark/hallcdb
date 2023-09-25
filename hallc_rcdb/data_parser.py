@@ -1,9 +1,9 @@
-import os,sys                                                                                 
-import xml.etree.ElementTree as Et                                                            
-from subprocess import check_output                                                           
-from datetime import datetime                                                                 
-from glob import glob                                                                         
-import shutil                                                                                 
+import os,sys
+import xml.etree.ElementTree as Et
+from subprocess import check_output
+from datetime import datetime
+from glob import glob
+import shutil                                                                   
 
 class CodaDataParseResult(object):
     
@@ -11,7 +11,7 @@ class CodaDataParseResult(object):
         self.run_number = None
         self.has_run_end = False
         self.start_time = None
-        self.end_time = None
+        self.end_time = None         # return datetime
         self.event_count = None
         self.last_mod_time = None
         self.evio_files = []
@@ -69,30 +69,27 @@ def get_run_info_from_data(run_number):
 
 def get_time_from_data(coda_file, evt_tag):                                                   
     this_time = None                                                                          
+    ev_count = None
     cmds = ["evio2xml", "-ev", evt_tag, "-xtod", "-max", "1", coda_file]                      
     out = check_output(cmds)                                                                  
     xml_root = Et.ElementTree(Et.fromstring(out)).getroot()                                   
     xml_check = xml_root.find("event")                                                        
     if xml_check is None:                                                                     
-        return this_time                                                                      
+        return this_time, ev_count                                                                      
     else:                                                                                     
         for xml_result in xml_root.findall("event"):                                          
             time_data = int(xml_result.text.split(None)[0])                                   
             this_time = datetime.fromtimestamp(time_data).strftime("%Y-%m-%d %H:%M:%S")       
-            if evt_tag == "65492":                                                            
-                ev_count = int(xml_result.text.split(None)[2])                                
-                return this_time, ev_count                                                    
-            else:                                                                             
-                return this_time                                                              
-                                          
+            ev_count = int(xml_result.text.split(None)[2])                                
+            return this_time, ev_count                                                    
 
 def get_start_time_from_data(coda_file):                                                      
-    start_time = get_time_from_data(coda_file, "65489")                                       
+    start_time, event_count = get_time_from_data(coda_file, "65489")                                       
     return start_time                                                                         
                                                                                               
 def get_end_time_from_data(coda_file):                                                        
-    end_time = get_time_from_data(coda_file, "65492")                                         
-    return end_time                                                                           
+    end_time, event_count = get_time_from_data(coda_file, "65492")                                         
+    return end_time, event_count                                                                           
                                                                                               
 def get_last_modified_time(coda_file):                                                        
     last_mod_time = None                                                                      
