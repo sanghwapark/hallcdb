@@ -11,8 +11,10 @@ def get_info_from_logfile(run_num, session, lruninfo):
 
     # The runnumber used for file name and the actual run number for data are different by 1.. -_-
     # So, we correct it here: str(run_num -1)
+    #new_run = int(run_num) -1
+    # This is no longer the case
 
-    new_run = int(run_num) -1
+    new_run = int(run_num)
     logfile = "/home/coda/debug_logs/" + session + "_logruninfo_" + str(new_run) + ".log"
     
     def read_file(fname, linfo):
