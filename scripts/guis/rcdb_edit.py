@@ -89,7 +89,7 @@ class RCDB_EDIT(Gtk.Window):
 
         #### RUN FLAG ###
         lbl4 = Gtk.Label("Run Flag:")
-        fixed.put(lbl4, 25, 480)
+        fixed.put(lbl4, 25, 510)
 
         #hidden for the inital value
         self.rbutton0 = Gtk.RadioButton.new_with_label_from_widget(None, "None")
@@ -111,22 +111,22 @@ class RCDB_EDIT(Gtk.Window):
         self.rbutton4.set_label("Suspicous")
         self.rbutton4.connect("toggled", self.on_rbutton_toggled, "Suspicious")
 
-        fixed.put(self.rbutton1, 110, 480)
-        fixed.put(self.rbutton2, 180, 480)
-        fixed.put(self.rbutton3, 270, 480)
-        fixed.put(self.rbutton4, 330, 480)
+        fixed.put(self.rbutton1, 110-5, 510)
+        fixed.put(self.rbutton2, 180-5, 510)
+        fixed.put(self.rbutton3, 270-5, 510)
+        fixed.put(self.rbutton4, 330-5, 510)
 
         # Save and exit
-        ok_button = Gtk.Button("SAVE")
+        ok_button = Gtk.Button("SAVE AND EXIT")
         ok_button.connect("clicked", self.on_ok_clicked, self.entry1)
-        ok_button.set_size_request(160, 10)
+        ok_button.set_size_request(190, 10)
 
         cancel_button = Gtk.Button("CANCEL")
         cancel_button.connect("clicked", self.on_cancel_clicked)
-        cancel_button.set_size_request(160, 10)
+        cancel_button.set_size_request(150, 10)
 
-        fixed.put(ok_button, 50, 520)
-        fixed.put(cancel_button, 220, 520)
+        fixed.put(ok_button, 25, 540)
+        fixed.put(cancel_button, 225, 540)
 
         self.add(fixed)
 
@@ -146,7 +146,7 @@ class RCDB_EDIT(Gtk.Window):
                 self.myDBTool.save_new_condition(runnum, "user_comment", comment)
         else:
             print ("DB connection failed?")
-        #Gtk.main_quit()
+        Gtk.main_quit()
 
     def on_cancel_clicked(self, widget):
         Gtk.main_quit()

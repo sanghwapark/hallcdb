@@ -6,6 +6,7 @@ import subprocess
 from datetime import datetime
 from glob import glob
 import shutil
+from epics import caget
 
 from rcdb.log_format import BraceMessage as Lf
 from hallc_rcdb import HallCconditions
@@ -51,9 +52,12 @@ def epics_parser(epics_list):
     for epics_name, cond_name in epics_list.items():
         parse_result[cond_name] = None
         try:
+            """
             cmds = ['caget', '-t', epics_name]
             out_str = subprocess.Popen(cmds, stdout=subprocess.PIPE).stdout.read().strip()
             value = out_str.decode('ascii')
+            """
+            value = caget(epics_name)
             parse_result[cond_name] = value
         except Exception as ex:
             log.warning("Error: " + str(ex))
