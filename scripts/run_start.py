@@ -41,6 +41,7 @@ def main():
     argparser.add_argument("--test", help="Test mode flag", default=False)
     argparser.add_argument("-v","--verbose", help="increase output verbosity", action="store_true")
     argparser.add_argument("-c","--connection", help="connection string, e.g: mysql://rcdb@cdaqdb1.jlab.org/c-rcdb")
+    argparser.add_argument("--dist", help="Calorimeter distance", default=9.5)
     args = argparser.parse_args()
 
     # Set log output level
@@ -93,6 +94,9 @@ def main():
         nps_angle = float(epics_result["shms_angle"]) - nps_angle_offset
         conditions.append(("nps_angle", nps_angle))
                 
+    # add calodistance
+    conditions.append(("calo_distance", args.dist))
+
     # parse coda info
     if "coda" in update_parts:
         try:
