@@ -19,6 +19,7 @@ class HallCconditions(object):
     HELICITY_FREQ = "helicity_freq"
     FLIP_STATE = "flip_state"
     HMS_MOMENTUM = "hms_momentum"
+    NPS_SWEEPER = "nps_sweeper"
     
 def create_condition_types(db):
     """

@@ -9,6 +9,22 @@ from rcdb.log_format import BraceMessage as Lf
 # Collection of helper functions for Hall C RCDB
 ###################################################
 
+def get_epics(epics_name, time_str):
+    """
+    Get epics condition from archiver using myget
+    Input: epics PV, timestring
+    """
+    cmds = ["myget", "-c", epics_name, "-t", time_str]
+    cond_out = subprocess.Popen(cmds, stdout=subprocess.PIPE)
+    for line in cond_out.stdout:
+        line = line.decode('ascii')
+        tokens = line.strip().split()
+        if len(tokens) > 3:
+            value = None
+        else:
+            value = tokens[2]
+    return value
+
 def get_epics_avg(run, epics_name, rmin, rmax):
     """
     Get average epics values from epics db
