@@ -20,7 +20,8 @@ epics_list = {
     "PWF1I04:spinCalc":HallCconditions.VWIEN,
     "HELFREQ":HallCconditions.HELICITY_FREQ,
     "HMS_Momentum":HallCconditions.HMS_MOMENTUM,
-    "MNPSSWEEP":HallCconditions.NPS_SWEEPER
+    "MNPSSWEEP":HallCconditions.NPS_SWEEPER,
+    "IGL1I00OD16_16":HallCconditions.IHWP
 }
 
 def main():

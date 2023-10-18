@@ -16,5 +16,5 @@ if [[ -z "$RCDB_CONNECTION" ]]; then
 fi    
 
 # Run the script 
-python3 ${SCRIPT_DIR}/run_start.py --run=${RunNum} --daq=${Session} --update=epics,coda --reason=start --dist=3.0
+python3 ${SCRIPT_DIR}/run_start.py --run=${RunNum} --daq=${Session} --update=epics,coda --reason=start --dist=9.5
 #python3 ${SCRIPT_DIR}/run_start.py --run=${RunNum} --daq=${Session} --update=epics,coda --reason=start --test=True

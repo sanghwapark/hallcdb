@@ -16,6 +16,7 @@ class HallCconditions(object):
     NPS_ANGLE = "nps_angle"
     HWIEN = "hwien"
     VWIEN = "vwien"
+    IHWP = "ihwp"
     HELICITY_FREQ = "helicity_freq"
     FLIP_STATE = "flip_state"
     HMS_MOMENTUM = "hms_momentum"
