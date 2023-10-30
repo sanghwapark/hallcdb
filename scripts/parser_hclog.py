@@ -7,17 +7,17 @@ from urllib import request
 import os.path
 import argparse
 
-parser = argparse.ArgumentParser(description='Helper script to check standard kinematics with epics variables. The script will read first_epics_30.results file from the logbook entry for a given run. It will dump what it reads to a dictionary and store it into a file. The run number is used as a key. If the file already exists, it will first check the file instead of accessing the logbook.')
-parser.add_argument('--runs', help='Run range', required=True)
-parser.add_argument('-m','--mode',help='Identify spectrometer: HMS, SHMS, NPS', default='NPS')
-parser.add_argument('-v','--verbose',help='Set verbose level. Default value is 0', default=0)
-args = parser.parse_args()
-
-runs = args.runs
-mode = args.mode
-verbose = args.verbose
-
 def main():
+
+    parser = argparse.ArgumentParser(description='Helper script to check standard kinematics with epics variables. The script will read first_epics_30.results file from the logbook entry for a given run. It will dump what it reads to a dictionary and store it into a file. The run number is used as a key. If the file already exists, it will first check the file instead of accessing the logbook.')
+    parser.add_argument('--runs', help='Run range', required=True)
+    parser.add_argument('-m','--mode',help='Identify spectrometer: HMS, SHMS, NPS', default='NPS')
+    parser.add_argument('-v','--verbose',help='Set verbose level. Default value is 0', default=0)
+    args = parser.parse_args()
+    
+    runs = args.runs
+    mode = args.mode
+    verbose = args.verbose
 
     # For a single run test
     #dd = {}
@@ -41,10 +41,10 @@ def main():
 
     ## get epics variables
     dd = {}
-    dd = load_epics_dict(lruns)
+    dd = load_epics_dict(lruns, mode)
     #print(dd['1567'])
 
-def load_epics_dict(runs):
+def load_epics_dict(runs, mode):
     pickle_file = '%s.pkl' % mode
 
     ddict = {}
@@ -74,6 +74,8 @@ def load_epics_dict(runs):
     return ddict
 
 def get_logbook_start_run_EPICS(run, ddict):
+    print("Get start run data for: ", run)
+
     author = "cdaq"
     LOGBOOK = "HCLOG"
 
@@ -129,7 +131,7 @@ def get_logbook_start_run_EPICS(run, ddict):
             if EFILE[3] in item['url']:
                 url2[3] = item['url']
 
-        print(url2)
+        #print(url2)
 
         # VME1 config file
         try:
@@ -225,6 +227,92 @@ def parse_vtpconfig(result, parse_result):
             continue
         name, value = line.split(None,1)
         parse_result[name] = value
+
+def get_logbook_end_run_EPICS(run, ddict):
+    print("Get end run data for: ", run)
+
+    author = "cdaq"
+    LOGBOOK = "NPS"
+
+    prefix= 'https://logbooks.jlab.org/entry'            # Logbook entry URL prefix
+
+    url = 'https://logbooks.jlab.org/api/elog/entries'   # Base query url
+    url = url + '?book=' + LOGBOOK                       # specify Logbook
+    url = url + '&limit=0'                               # return all entries
+
+    ## Constrain date (default is -180 days. ex. look back ~6 months)
+    url = url + '&startdate=2023-09-01'
+    url = url + '&enddate=2023-11-30'
+
+    ## Constrain search to a Tag
+    url = url + '&tag=Autolog'
+
+    ## Output fields
+    url = url + '&field=attachments'
+    url = url + '&field=lognumber&field=created&field=title'
+    url = url + '&field=body&field=author&field=entrymakers' 
+    ## Append query fields
+    url = url + "&title=" + "NPS: End of run " + str(run)
+    url = url + "&author=" + author
+
+    ## One may need to put username + password
+    ## if not using it from the jlab computer
+    res = requests.get(url)
+    res.json()
+    
+    dec_json = json.loads(res.text)
+    #print(dec_json)
+
+    EFILE = str(run) + "-NPS.log"
+
+    if dec_json['data']['currentItems'] == 0:
+        return
+    else:
+        #print(dec_json['data']['entries'][0]['created']['timestamp'])
+        #print(dec_json['data']['entries'][0]['body']['content'])
+
+        ddict[str(run)] = {}
+        ddict[str(run)]['timestamp'] = dec_json['data']['entries'][0]['created']['timestamp']
+
+        """
+        url2 = None
+        for i, item in enumerate(dec_json['data']['entries'][0]['attachments']):
+            if EFILE in item:
+                url2 = item['url']
+                break
+        print(url2)
+        """
+        url2 = dec_json['data']['entries'][0]['attachments'][0]['url']
+        #print(url2)
+
+        # parse the log file
+        try:
+            res_log = requests.get(url2)
+            if res_log.status_code == 200:
+                ddict[str(run)]['end_log'] = {}            
+                parse_endlog(res_log, ddict[str(run)]['end_log'])
+        except Exception as ex:
+            print("Fail to parse end run log file, ", str(ex))
+
+def parse_endlog(result, parse_result):
+
+    config_name = None
+    nevents = None
+
+    for line in result.iter_lines():
+        line = line.decode('utf8')
+        if line == "":
+            continue
+        if "configtype =" in line:
+            ltemp = line.split("=")[1]
+            config_name = ltemp.split(",")[0]
+
+        if "ROC1 INFO: ended after" in line:
+            ltemp = line.split("(")[1]
+            nevents = ltemp.split(None)[0]
+    parse_result["config"] = config_name
+    parse_result["nevents"] = nevents
+    return
 
 if __name__== '__main__':
     main()
