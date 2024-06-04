@@ -211,3 +211,7 @@ def runinfo_parser(runinfo_file):
 
     return runinfo
 
+def get_last_segment_number(run_num, data_path):
+    num_files = len([files for files in glob.glob(data_path + "/*" + run_num + ".dat*")])
+    return num_files
+

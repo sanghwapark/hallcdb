@@ -87,7 +87,7 @@ def get_logbook_start_run_EPICS(run, ddict):
 
     ## Constrain date (default is -180 days. ex. look back ~6 months)
     url = url + '&startdate=2023-09-01'
-    url = url + '&enddate=2023-11-30'
+    url = url + '&enddate=2024-04-30'
 
     ## Constrain search to a Tag
     url = url + '&tag=StartOfRun'
@@ -242,7 +242,7 @@ def get_logbook_end_run_EPICS(run, ddict):
 
     ## Constrain date (default is -180 days. ex. look back ~6 months)
     url = url + '&startdate=2023-09-01'
-    url = url + '&enddate=2023-11-30'
+    url = url + '&enddate=2024-04-30'
 
     ## Constrain search to a Tag
     url = url + '&tag=Autolog'

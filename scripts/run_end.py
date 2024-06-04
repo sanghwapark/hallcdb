@@ -10,6 +10,7 @@ from rcdb.log_format import BraceMessage as Lf
 
 from hallc_rcdb import runlog_parser as logparser
 import hallc_rcdb.helper as helper
+from hallc_rcdb.parse_nps_param import parse_nps_param
 
 log = logging.getLogger("hallc.rcdb")
 log.addHandler(logging.StreamHandler(sys.stdout))
@@ -33,6 +34,9 @@ def end_run_update(logfile):
     # Wait for 2 sec for the daq run-log to be written at end of run
     # time.sleep(2)
 
+    # NPS parameters
+    parse_result_nps = parse_nps_param()
+
     # Parse information from coda run-log
     parse_result = logparser.parse_file(logfile)
 
@@ -47,7 +51,7 @@ def end_run_update(logfile):
         log.info(Lf("run_end: Run '{}' is not found in DB.", run_num))
         return
         
-    def updateDB(result, run):
+    def updateDB(result, result2, run):
         # Run end time
         if result.end_time is None:
             if result.update_time is None:
@@ -77,6 +81,19 @@ def end_run_update(logfile):
         #conditions.append((rcdb.DefaultConditions.IS_VALID_RUN_END, result.has_run_end))
         conditions.append((rcdb.DefaultConditions.IS_VALID_RUN_END, True))
 
+        # NPS parameters
+        if "nps_fadc250_sparsification" in result2:
+            conditions.append(("nps_fadc250_sparsification", result2["nps_fadc250_sparsification"]))
+
+        if "VTP_NPS_ECALCLUSTER_CLUSTER_READOUT_THR" in result2:
+            conditions.append(("nps_vtp_clus_readout_thr", result2["VTP_NPS_ECALCLUSTER_CLUSTER_READOUT_THR"]))
+
+        if "VTP_NPS_ECALCLUSTER_CLUSTER_TRIGGER_THR" in result2:
+            conditions.append(("nps_vtp_clus_trigger_thr", result2["VTP_NPS_ECALCLUSTER_CLUSTER_TRIGGER_THR"]))
+
+        if "VTP_NPS_ECALCLUSTER_CLUSTER_PAIR_TRIGGER_THR" in result2:
+            conditions.append(("nps_vtp_pair_trigger_thr", result2["VTP_NPS_ECALCLUSTER_CLUSTER_PAIR_TRIGGER_THR"]))
+
         # Estimate total charge based on average bean current delivered
         # Skip this now, myStats not available from coda@cdaql6
         """
@@ -97,6 +114,7 @@ def end_run_update(logfile):
             print("Run length:\t %f" % (float(total_run_time)))
             print("Total event counts %d" % (int(result.event_count)))
             print("Event rate %.2f" % (float(event_rate)))
+            print(conditions)
         else:
             db.add_conditions(run, conditions, replace=True)
             db.session.commit()
@@ -108,7 +126,7 @@ def end_run_update(logfile):
                                       time.time() - script_start_time,
                                       datetime.now()), run_num)
 
-    updateDB(parse_result, run)
+    updateDB(parse_result, parse_result_nps, run)
     """
     if run_num == parse_result.run_number:
         updateDB(parse_result, run)

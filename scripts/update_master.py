@@ -178,7 +178,7 @@ def update_run(db, run, parse_result):
             print("vtp config:", str(ex))
 
     # FADC sparsification
-    if 'nps_fadc250_sparsification' in parse_result['nps_fadc250_sparsification'] and  parse_result['nps_fadc250_sparsification'] is not None: 
+    if 'nps_fadc250_sparsification' in parse_result and  parse_result['nps_fadc250_sparsification'] is not None: 
         try:
             db.add_condition(run, "nps_fadc250_sparsification", parse_result["nps_fadc250_sparsification"], True)
         except Exception as ex:

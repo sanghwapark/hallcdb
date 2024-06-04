@@ -1,4 +1,5 @@
 import os, sys
+import json
 from datetime import datetime, timedelta
 import argparse
 import logging
@@ -7,6 +8,7 @@ import rcdb
 from rcdb.log_format import BraceMessage as Lf
 from hallc_rcdb import HallCconditions, parser
 from hallc_rcdb.parser import CodaParseResult, EpicsParseResult
+from hallc_rcdb.parse_nps_param import parse_nps_param
 
 # Define EPICS LIST
 epics_list = {
@@ -17,7 +19,10 @@ epics_list = {
     "ecHMS_Angle":HallCconditions.HMS_ANGLE,
     "PWF1I06:spinCalc":HallCconditions.HWIEN,
     "PWF1I04:spinCalc":HallCconditions.VWIEN,
-    "HELFREQ":HallCconditions.HELICITY_FREQ
+    "HELFREQ":HallCconditions.HELICITY_FREQ,
+    "HMS_Momentum":HallCconditions.HMS_MOMENTUM,
+    "MNPSSWEEP":HallCconditions.NPS_SWEEPER,
+    "IGL1I00OD16_16":HallCconditions.IHWP
 }
 
 def main():
@@ -39,6 +44,7 @@ def main():
     argparser.add_argument("--test", help="Test mode flag", default=False)
     argparser.add_argument("-v","--verbose", help="increase output verbosity", action="store_true")
     argparser.add_argument("-c","--connection", help="connection string, e.g: mysql://rcdb@cdaqdb1.jlab.org/c-rcdb")
+    argparser.add_argument("--dist", help="Calorimeter distance", default=9.5)
     args = argparser.parse_args()
 
     # Set log output level
@@ -91,13 +97,18 @@ def main():
         nps_angle = float(epics_result["shms_angle"]) - nps_angle_offset
         conditions.append(("nps_angle", nps_angle))
                 
+    # add calodistance
+    conditions.append(("calo_distance", args.dist))
+
     # parse coda info
     if "coda" in update_parts:
+        # General daq stuff
         try:
             coda_parse_result = CodaParseResult()
             this_session = str(args.daq)
             log.debug(Lf("Adding coda conditions to DB", ))
             parser.coda_parser(this_session, coda_parse_result)
+
             if coda_parse_result.runnumber is None:
                 log.warn("ERROR: Coda parser run number mismatch.\n")
                 # use user input runnumber
@@ -109,10 +120,33 @@ def main():
             conditions.append((rcdb.DefaultConditions.SESSION, coda_parse_result.session_name))
             conditions.append((rcdb.DefaultConditions.RUN_CONFIG, coda_parse_result.config))
             conditions.append(("prescales", json.dumps(coda_parse_result.prescales)))
+            conditions.append(("blocklevel", coda_parse_result.blocklevel))
+
         except Exception as ex:
             log.warn("coda run log parser failed.\n" + str(ex))
             db.add_log_record("", 
                               "Start of run: coda parser failed", run_num)
+
+        ## this is for nps parameters
+        try:
+            nps_parse_result = parse_nps_param()
+            conditions.append(())
+
+            if "nps_fadc250_sparsification" in nps_parse_result:
+                conditions.append(("nps_fadc250_sparsification", nps_parse_result["nps_fadc250_sparsification"]))
+
+            if "VTP_NPS_ECALCLUSTER_CLUSTER_READOUT_THR" in nps_parse_result:
+                conditions.append(("nps_vtp_clus_readout_thr", nps_parse_result["VTP_NPS_ECALCLUSTER_CLUSTER_READOUT_THR"]))
+
+            if "VTP_NPS_ECALCLUSTER_CLUSTER_TRIGGER_THR" in nps_parse_result:
+                conditions.append(("nps_vtp_clus_trigger_thr", nps_parse_result["VTP_NPS_ECALCLUSTER_CLUSTER_TRIGGER_THR"]))
+
+            if "VTP_NPS_ECALCLUSTER_CLUSTER_PAIR_TRIGGER_THR" in nps_parse_result:
+                conditions.append(("nps_vtp_pair_trigger_thr", nps_parse_result["VTP_NPS_ECALCLUSTER_CLUSTER_PAIR_TRIGGER_THR"]))
+        except Exception as ex:
+            log.warn("nps parameter parser failed.\n" + str(ex))
+            db.add_log_record("", 
+                              "Start of run: nps parser failed", run_num)
 
     ######  UPDATE  ######
     if args.test:
