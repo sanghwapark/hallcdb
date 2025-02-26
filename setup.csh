@@ -1,7 +1,10 @@
 #!/bin/csh
 
-set RCDB_DIR=/home/cdaq/rcdb/rcdb
+# Modify these two lines as you need
+#--------------------------------------
 set HCDB_DIR=/home/cdaq/rcdb/hallcdb
+set RCDB_DIR=${HCDB_DIR}/rcdb
+#--------------------------------------
 
 # RCDB environment 
 if ( ! $?RCDB_HOME ) then
@@ -27,5 +30,4 @@ setenv PYTHONPATH "$HCDB_DIR":$PYTHONPATH
 
 
 # Connection string
-setenv RCDB_CONNECTION mysql://rcdb@cdaqdb1.jlab.org/c-rcdb
-#setenv RCDB_CONNECTION mysql://rcdb@cdaqdb1.jlab.org/rcdb
+setenv RCDB_CONNECTION mysql://rcdb@hallcdb.jlab.org/c-rcdb

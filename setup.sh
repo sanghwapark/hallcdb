@@ -1,7 +1,10 @@
 #!/bin/bash
 
-RCDB_DIR=/home/cdaq/rcdb/rcdb
+# Modify these two lines as you need
+#--------------------------------------
 HCDB_DIR=/home/cdaq/rcdb/hallcdb
+RCDB_DIR=${HCDB_DIR}/rcdb
+#--------------------------------------
 
 # RCDB environment 
 if [[ -z "$RCDB_HOME" ]]; then
@@ -27,5 +30,5 @@ export PYTHONPATH="$HCDB_DIR":$PYTHONPATH
 
 
 # Connection string
-export RCDB_CONNECTION=mysql://rcdb@cdaqdb1.jlab.org/c-rcdb
-#export RCDB_CONNECTION=mysql://rcdb@cdaqdb1.jlab.org/rcdb
+export RCDB_CONNECTION=mysql://rcdb@hallcdb.jlab.org/c-rcdb
+
