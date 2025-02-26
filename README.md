@@ -5,17 +5,13 @@
   ```
   git clone https://github.com/JeffersonLab/hallcdb
   ```
-2) Download rcdb (or add it as submodule)
-  ```
-  git clone https://github.com/JeffersonLab/rcdb
-  ```
-3) Set environment variables
-  For HallC: 
+2) Set environment variables. Modify setup.csh script as needed. You will most likely need to update the first two variables to adjust the path.
+  Once it's done, 
   ```
   > cd hallcdb
   > source setup.csh
   ```
-4) Check if things are set properly. For example, type:
+3) Check if things are set properly. For example, type:
   ```
   > rcnd
   ```
@@ -25,6 +21,8 @@
 -----------------------------
 
 ## Notes:
+### RCDB submodule
+  - rcdb package (https://github.com/JeffersonLab/rcdb) is added as submodule with a specific tag. This release version is a rather old one, but for now keep it as it is. 
 ### Connection string:
   - For updating DB entries: Master DB should be only used when making DB entries by start/end run scripts from cdaq machines. On cdaq computers, RCDB environment is set when login, and the connection string is set to the master database.
   - Please use the read-only copy otherwise:
