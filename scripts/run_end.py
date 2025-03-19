@@ -24,7 +24,7 @@ def end_run_update(logfile):
     time_now = datetime.now()
 
     # for the log
-    script_start_clock = time.clock()
+    script_start_clock = time.process_time()
     script_start_time = time.time()
 
     con_str = os.environ["RCDB_CONNECTION"] \
@@ -82,17 +82,17 @@ def end_run_update(logfile):
         conditions.append((rcdb.DefaultConditions.IS_VALID_RUN_END, True))
 
         # NPS parameters
-        if "nps_fadc250_sparsification" in result2:
-            conditions.append(("nps_fadc250_sparsification", result2["nps_fadc250_sparsification"]))
+        #if "nps_fadc250_sparsification" in result2:
+        #    conditions.append(("nps_fadc250_sparsification", result2["nps_fadc250_sparsification"]))
 
-        if "VTP_NPS_ECALCLUSTER_CLUSTER_READOUT_THR" in result2:
-            conditions.append(("nps_vtp_clus_readout_thr", result2["VTP_NPS_ECALCLUSTER_CLUSTER_READOUT_THR"]))
+        #if "VTP_NPS_ECALCLUSTER_CLUSTER_READOUT_THR" in result2:
+        #    conditions.append(("nps_vtp_clus_readout_thr", result2["VTP_NPS_ECALCLUSTER_CLUSTER_READOUT_THR"]))
 
-        if "VTP_NPS_ECALCLUSTER_CLUSTER_TRIGGER_THR" in result2:
-            conditions.append(("nps_vtp_clus_trigger_thr", result2["VTP_NPS_ECALCLUSTER_CLUSTER_TRIGGER_THR"]))
+        #if "VTP_NPS_ECALCLUSTER_CLUSTER_TRIGGER_THR" in result2:
+        #    conditions.append(("nps_vtp_clus_trigger_thr", result2["VTP_NPS_ECALCLUSTER_CLUSTER_TRIGGER_THR"]))
 
-        if "VTP_NPS_ECALCLUSTER_CLUSTER_PAIR_TRIGGER_THR" in result2:
-            conditions.append(("nps_vtp_pair_trigger_thr", result2["VTP_NPS_ECALCLUSTER_CLUSTER_PAIR_TRIGGER_THR"]))
+        #if "VTP_NPS_ECALCLUSTER_CLUSTER_PAIR_TRIGGER_THR" in result2:
+        #    conditions.append(("nps_vtp_pair_trigger_thr", result2["VTP_NPS_ECALCLUSTER_CLUSTER_PAIR_TRIGGER_THR"]))
 
         # Estimate total charge based on average bean current delivered
         # Skip this now, myStats not available from coda@cdaql6
@@ -119,7 +119,7 @@ def end_run_update(logfile):
             db.add_conditions(run, conditions, replace=True)
             db.session.commit()
 
-            now_clock = time.clock()
+            now_clock = time.process_time()
             db.add_log_record("",
                               "End of run update. Script proc clocks='{}', wall time: '{}', datetime: '{}'"
                               .format(now_clock - script_start_clock,

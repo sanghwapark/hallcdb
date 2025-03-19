@@ -8,7 +8,7 @@ import rcdb
 from rcdb.log_format import BraceMessage as Lf
 from hallc_rcdb import HallCconditions, parser
 from hallc_rcdb.parser import CodaParseResult, EpicsParseResult
-from hallc_rcdb.parse_nps_param import parse_nps_param
+#from hallc_rcdb.parse_nps_param import parse_nps_param
 
 # Define EPICS LIST
 epics_list = {
@@ -21,7 +21,7 @@ epics_list = {
     "PWF1I04:spinCalc":HallCconditions.VWIEN,
     "HELFREQ":HallCconditions.HELICITY_FREQ,
     "HMS_Momentum":HallCconditions.HMS_MOMENTUM,
-    "MNPSSWEEP":HallCconditions.NPS_SWEEPER,
+#    "MNPSSWEEP":HallCconditions.NPS_SWEEPER,
     "IGL1I00OD16_16":HallCconditions.IHWP
 }
 
@@ -37,10 +37,10 @@ def main():
     # parse args
     argparser = argparse.ArgumentParser(description=" Update Hall C RCDB", usage=get_usage())
     argparser.add_argument("--run", type=int, help="Run number to update", required=True)
-    argparser.add_argument("--daq",  help="DAQ session: NPS, HMS, SHMS", required=True)
+    argparser.add_argument("--daq",  help="DAQ session: LAD, HMS, SHMS", required=True)
     argparser.add_argument("--update", help="Comma separated, modules to update such as coda, epics", default="coda,epics")
     argparser.add_argument("--reason", help="Reason for the update: start, update, end", default="start")
-    argparser.add_argument("--exp", help="Experiment name", default="NPS")
+    argparser.add_argument("--exp", help="Experiment name", default="LAD")
     argparser.add_argument("--test", help="Test mode flag", default=False)
     argparser.add_argument("-v","--verbose", help="increase output verbosity", action="store_true")
     argparser.add_argument("-c","--connection", help="connection string, e.g: mysql://rcdb@cdaqdb1.jlab.org/c-rcdb")
@@ -93,12 +93,12 @@ def main():
                 conditions.append((key, epics_result[key]))
                 
         # NPS angle (set to SHMS angle for now)
-        nps_angle_offset = 16.27
-        nps_angle = float(epics_result["shms_angle"]) - nps_angle_offset
-        conditions.append(("nps_angle", nps_angle))
+        #nps_angle_offset = 16.27
+        #nps_angle = float(epics_result["shms_angle"]) - nps_angle_offset
+        #conditions.append(("nps_angle", nps_angle))
                 
     # add calodistance
-    conditions.append(("calo_distance", args.dist))
+    #conditions.append(("calo_distance", args.dist))
 
     # parse coda info
     if "coda" in update_parts:
@@ -120,7 +120,7 @@ def main():
             conditions.append((rcdb.DefaultConditions.SESSION, coda_parse_result.session_name))
             conditions.append((rcdb.DefaultConditions.RUN_CONFIG, coda_parse_result.config))
             conditions.append(("prescales", json.dumps(coda_parse_result.prescales)))
-            conditions.append(("blocklevel", coda_parse_result.blocklevel))
+            #conditions.append(("blocklevel", coda_parse_result.blocklevel))
 
         except Exception as ex:
             log.warn("coda run log parser failed.\n" + str(ex))
@@ -128,25 +128,25 @@ def main():
                               "Start of run: coda parser failed", run_num)
 
         ## this is for nps parameters
-        try:
-            nps_parse_result = parse_nps_param()
-
-            if "nps_fadc250_sparsification" in nps_parse_result:
-                conditions.append(("nps_fadc250_sparsification", nps_parse_result["nps_fadc250_sparsification"]))
-
-            if "VTP_NPS_ECALCLUSTER_CLUSTER_READOUT_THR" in nps_parse_result:
-                conditions.append(("nps_vtp_clus_readout_thr", nps_parse_result["VTP_NPS_ECALCLUSTER_CLUSTER_READOUT_THR"]))
-
-            if "VTP_NPS_ECALCLUSTER_CLUSTER_TRIGGER_THR" in nps_parse_result:
-                conditions.append(("nps_vtp_clus_trigger_thr", nps_parse_result["VTP_NPS_ECALCLUSTER_CLUSTER_TRIGGER_THR"]))
-
-            if "VTP_NPS_ECALCLUSTER_CLUSTER_PAIR_TRIGGER_THR" in nps_parse_result:
-                conditions.append(("nps_vtp_pair_trigger_thr", nps_parse_result["VTP_NPS_ECALCLUSTER_CLUSTER_PAIR_TRIGGER_THR"]))
-        except Exception as ex:
-            log.warn("nps parameter parser failed.\n" + str(ex))
-            db.add_log_record("", 
-                              "Start of run: nps parser failed", run_num)
-
+#        try:
+#            nps_parse_result = parse_nps_param()
+#
+#            if "nps_fadc250_sparsification" in nps_parse_result:
+#                conditions.append(("nps_fadc250_sparsification", nps_parse_result["nps_fadc250_sparsification"]))
+#
+#            if "VTP_NPS_ECALCLUSTER_CLUSTER_READOUT_THR" in nps_parse_result:
+#                conditions.append(("nps_vtp_clus_readout_thr", nps_parse_result["VTP_NPS_ECALCLUSTER_CLUSTER_READOUT_THR"]))
+#
+#            if "VTP_NPS_ECALCLUSTER_CLUSTER_TRIGGER_THR" in nps_parse_result:
+#                conditions.append(("nps_vtp_clus_trigger_thr", nps_parse_result["VTP_NPS_ECALCLUSTER_CLUSTER_TRIGGER_THR"]))
+#
+#            if "VTP_NPS_ECALCLUSTER_CLUSTER_PAIR_TRIGGER_THR" in nps_parse_result:
+#                conditions.append(("nps_vtp_pair_trigger_thr", nps_parse_result["VTP_NPS_ECALCLUSTER_CLUSTER_PAIR_TRIGGER_THR"]))
+#        except Exception as ex:
+#            log.warn("nps parameter parser failed.\n" + str(ex))
+#            db.add_log_record("", 
+#                              "Start of run: nps parser failed", run_num)
+#
     ######  UPDATE  ######
     if args.test:
         print(conditions)
@@ -168,17 +168,17 @@ def get_usage():
     return """
     
     Usage:
-    python3 run_start.py --run=<run number> --session=[HMS,SHMS,NPS] -c <db_connection string> --update=[coda,epics] --reason=[start,update,end] --exp=NPS
+    python3 run_start.py --run=<run number> --session=[HMS,SHMS,LAD] -c <db_connection string> --update=[coda,epics] --reason=[start,update,end] --exp=LAD
 
     Examples:
     Update epics info only, at the start of run
-    > python3 run_start.py --run=123 --session=HMS --update=epics --reason=start --exp=NPS
+    > python3 run_start.py --run=123 --session=HMS --update=epics --reason=start --exp=LAD
 
     Update both coda, epics info, at the end of the run
-    > python3 run_start.py --run=123 --session=HMS --update=coda,epics --reason=end --exp=NPS
+    > python3 run_start.py --run=123 --session=HMS --update=coda,epics --reason=end --exp=LAD
 
     Run the script in Test mode:
-    > python3 run_start.py --test --run=123 --session=HMS --update=coda,epics --reason=end --exp=NPS
+    > python3 run_start.py --test --run=123 --session=HMS --update=coda,epics --reason=end --exp=LAD
     """
     
 if __name__=="__main__":
