@@ -1,3 +1,6 @@
 __pycache__/
 *~
 *.pyc
+scripts/test
+*copy*
+*bk*

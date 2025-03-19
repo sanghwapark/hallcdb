@@ -27,5 +27,5 @@ setenv PYTHONPATH "$HCDB_DIR":$PYTHONPATH
 
 
 # Connection string
-setenv RCDB_CONNECTION mysql://rcdb@cdaqdb1.jlab.org/c-rcdb
+setenv RCDB_CONNECTION mysql://rcdb@hallcdb.jlab.org/c-rcdb
 #setenv RCDB_CONNECTION mysql://rcdb@cdaqdb1.jlab.org/rcdb

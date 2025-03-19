@@ -1,13 +1,13 @@
-<coda runtype = "NPS-VLD" session = "NPS">
+<coda runtype = "NPS-COSMIC-SCINT" session = "NPS">
    <run-start>
-      <run-number>899</run-number>
-      <start-time>09/04/23 17:43:57</start-time>
-      <out-file>/home/coda/data/raw/nps_899.dat.0</out-file>
+      <run-number>972</run-number>
+      <start-time>09/09/23 19:57:47</start-time>
+      <out-file>/home/coda/data/raw/nps_972.dat.0</out-file>
       <components>
          <component name = "npsvme5" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.3088894652981065</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.4559581</evt-rate>
+            <data-rate>13.499798840334181</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -18,22 +18,22 @@
             <out-file>0</out-file>
          </component>
          <component name = "PEB1" type = "PEB">
-            <evt-rate>0.014283061</evt-rate>
-            <data-rate>2.856612343421936E-4</data-rate>
-            <evt-number>1</evt-number>
-            <min-evt-size>2147483647</min-evt-size>
-            <max-evt-size>0</max-evt-size>
-            <average-evt-size>0</average-evt-size>
+            <evt-rate>0.45589328</evt-rate>
+            <data-rate>116.21849406560345</data-rate>
+            <evt-number>23896</evt-number>
+            <min-evt-size>251540</min-evt-size>
+            <max-evt-size>261116</max-evt-size>
+            <average-evt-size>251757</average-evt-size>
             <min-evt-build-time>0</min-evt-build-time>
             <max-evt-build-time>0</max-evt-build-time>
             <average-evt-build-time>0</average-evt-build-time>
-            <chunk-x-et-buffer>0</chunk-x-et-buffer>
-            <out-file>/home/coda/data/raw/nps_899.dat.0</out-file>
+            <chunk-x-et-buffer>48337344</chunk-x-et-buffer>
+            <out-file>/home/coda/data/raw/nps_972.dat.0</out-file>
          </component>
          <component name = "npsvtp1" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.07908146810294782</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45590785</evt-rate>
+            <data-rate>0.17313004517980915</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -44,9 +44,9 @@
             <out-file></out-file>
          </component>
          <component name = "npsvtp2" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.07915294725288914</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45590886</evt-rate>
+            <data-rate>0.1238480883785881</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -57,9 +57,9 @@
             <out-file></out-file>
          </component>
          <component name = "npsvtp3" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.07919257165926524</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45590818</evt-rate>
+            <data-rate>0.08933335309984844</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -70,9 +70,9 @@
             <out-file></out-file>
          </component>
          <component name = "npsvtp4" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.07917211540013884</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45590892</evt-rate>
+            <data-rate>0.5019393348640833</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -83,9 +83,9 @@
             <out-file></out-file>
          </component>
          <component name = "npsvme1" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.8373681567051733</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45600536</evt-rate>
+            <data-rate>25.04542590166593</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -96,9 +96,9 @@
             <out-file>0</out-file>
          </component>
          <component name = "npsvtp5" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.07920408295109503</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45590854</evt-rate>
+            <data-rate>0.23122155234161176</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -109,9 +109,9 @@
             <out-file></out-file>
          </component>
          <component name = "npsvme2" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.29816686041312707</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45595938</evt-rate>
+            <data-rate>25.039251986199666</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -122,9 +122,9 @@
             <out-file>0</out-file>
          </component>
          <component name = "npsvme3" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.3088322465915827</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45595846</evt-rate>
+            <data-rate>26.680390058468774</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -135,9 +135,9 @@
             <out-file>0</out-file>
          </component>
          <component name = "npsvme4" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.2980442632915013</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45596594</evt-rate>
+            <data-rate>25.015901542044503</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -149,21 +149,21 @@
          </component>
       </components>
       <rtvs>
-         <rtv name = "%(rn)" value = "872"/>
+         <rtv name = "%(rn)" value = "961"/>
          <rtv name = "%(session)" value = "NPS"/>
-         <rtv name = "%(rt)" value = "NPS-VLD"/>
+         <rtv name = "%(rt)" value = "NPS-COSMIC-SCINT"/>
       </rtvs>
-      <update-time>09/04/23 17:45:02</update-time>
-      <total-evt>1</total-evt>
+      <update-time>09/10/23 10:31:22</update-time>
+      <total-evt>23896</total-evt>
    </run-start>
    <run-end>
-      <end-time>09/04/23 17:45:02</end-time>
-      <total-evt>1</total-evt>
+      <end-time>09/10/23 10:31:22</end-time>
+      <total-evt>23896</total-evt>
       <components>
          <component name = "npsvme5" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.3088894652981065</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.4559581</evt-rate>
+            <data-rate>13.499798840334181</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -174,22 +174,22 @@
             <out-file>0</out-file>
          </component>
          <component name = "PEB1" type = "PEB">
-            <evt-rate>0.014283061</evt-rate>
-            <data-rate>2.856612343421936E-4</data-rate>
-            <evt-number>1</evt-number>
-            <min-evt-size>2147483647</min-evt-size>
-            <max-evt-size>0</max-evt-size>
-            <average-evt-size>0</average-evt-size>
+            <evt-rate>0.45589328</evt-rate>
+            <data-rate>116.21849406560345</data-rate>
+            <evt-number>23896</evt-number>
+            <min-evt-size>251540</min-evt-size>
+            <max-evt-size>261116</max-evt-size>
+            <average-evt-size>251757</average-evt-size>
             <min-evt-build-time>0</min-evt-build-time>
             <max-evt-build-time>0</max-evt-build-time>
             <average-evt-build-time>0</average-evt-build-time>
-            <chunk-x-et-buffer>0</chunk-x-et-buffer>
-            <out-file>/home/coda/data/raw/nps_899.dat.0</out-file>
+            <chunk-x-et-buffer>48337344</chunk-x-et-buffer>
+            <out-file>/home/coda/data/raw/nps_972.dat.0</out-file>
          </component>
          <component name = "npsvtp1" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.07908146810294782</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45590785</evt-rate>
+            <data-rate>0.17313004517980915</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -200,9 +200,9 @@
             <out-file></out-file>
          </component>
          <component name = "npsvtp2" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.07915294725288914</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45590886</evt-rate>
+            <data-rate>0.1238480883785881</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -213,9 +213,9 @@
             <out-file></out-file>
          </component>
          <component name = "npsvtp3" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.07919257165926524</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45590818</evt-rate>
+            <data-rate>0.08933335309984844</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -226,9 +226,9 @@
             <out-file></out-file>
          </component>
          <component name = "npsvtp4" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.07917211540013884</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45590892</evt-rate>
+            <data-rate>0.5019393348640833</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -239,9 +239,9 @@
             <out-file></out-file>
          </component>
          <component name = "npsvme1" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.8373681567051733</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45600536</evt-rate>
+            <data-rate>25.04542590166593</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -252,9 +252,9 @@
             <out-file>0</out-file>
          </component>
          <component name = "npsvtp5" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.07920408295109503</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45590854</evt-rate>
+            <data-rate>0.23122155234161176</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -265,9 +265,9 @@
             <out-file></out-file>
          </component>
          <component name = "npsvme2" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.29816686041312707</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45595938</evt-rate>
+            <data-rate>25.039251986199666</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -278,9 +278,9 @@
             <out-file>0</out-file>
          </component>
          <component name = "npsvme3" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.3088322465915827</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45595846</evt-rate>
+            <data-rate>26.680390058468774</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
@@ -291,9 +291,9 @@
             <out-file>0</out-file>
          </component>
          <component name = "npsvme4" type = "ROC">
-            <evt-rate>0.0</evt-rate>
-            <data-rate>0.2980442632915013</data-rate>
-            <evt-number>0</evt-number>
+            <evt-rate>0.45596594</evt-rate>
+            <data-rate>25.015901542044503</data-rate>
+            <evt-number>23895</evt-number>
             <min-evt-size>0</min-evt-size>
             <max-evt-size>0</max-evt-size>
             <average-evt-size>0</average-evt-size>
