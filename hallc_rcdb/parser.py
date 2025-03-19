@@ -83,7 +83,7 @@ def coda_parser(session, parse_result):
         # do something        
         return parse_result
         
-    file_path = "/home/coda/coda/cool/" + session + "/ddb/controlSessions.xml"
+    file_path = "/home/hccoda/coda/cool/" + session + "/ddb/controlSessions.xml"
     xml_root = Et.parse(file_path).getroot()
     xml_result = xml_root.find("session").text
     if xml_result is None:
@@ -96,8 +96,8 @@ def coda_parser(session, parse_result):
     parse_result.runnumber = int(xml_root.find("session").find("runnumber").text)
     
     # get blocklevel
-    logfile = "/home/coda/coda/config_files/" + session + "/default.flags"    
-    parse_result.blocklevel = get_blocklevel(logfile)
+    #logfile = "/home/hccoda/coda/prescale_GUI/config_files/" + session + "/default.flags"    
+    #parse_result.blocklevel = get_blocklevel(logfile)
 
     # prescales
     parse_result.prescales = get_prescales(session)
@@ -152,7 +152,7 @@ def get_prescales(session):
     return prescales
 
 def parse_flags(session):
-    logfile = "/home/coda/coda/config_files/" + session + "/default.flags"        
+    logfile = "/home/hccoda/coda/prescale_GUI/config_files/" + session + "/default.flags"        
     flag_info = {}
     with open(logfile, "r") as f:
         for line in [x.strip() for x in f.readlines()]:
