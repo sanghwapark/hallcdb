@@ -158,7 +158,8 @@ def parse_flags(session):
         for line in [x.strip() for x in f.readlines()]:
             if ";" in line:
                 continue
-            if "blocklevel" in line:
+            #if "blocklevel" in line:
+            if "ps1" in line:
                 for item in line.split(","):
                     if "=" in item:
                         this_info = item.split("=")

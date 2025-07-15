@@ -50,5 +50,5 @@ if __name__=="__main__":
     run_number = sys.argv[1]
     run_type = sys.argv[2]
     run_comment = sys.argv[3]
-    #print(run_number, run_type, run_comment)
+#    print(run_number, run_type, run_comment)
     update_DB(run_number, run_type, run_comment)

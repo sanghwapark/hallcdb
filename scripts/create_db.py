@@ -12,7 +12,7 @@ if __name__=="__main__":
     db = rcdb.RCDBProvider(con_str, check_version=False)
 
     # Delete existing db schema -- use it with caution!
-    #rcdb.provider.destroy_all_create_schema(db)
+    rcdb.provider.destroy_all_create_schema(db)
 
     print("Create default condition types")
     rcdb.create_condition_types(db)
