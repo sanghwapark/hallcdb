@@ -2,13 +2,18 @@
 
 RunNum=$1
 DAQ_SESSION=$2
+Experiment=$3
 
-SCRIPT_DIR=/home/cdaq/rcdb/hallcdb/scripts
-RunLogFile=/home/coda/coda/cool/${DAQ_SESSION}/ddb/run-log/${DAQ_SESSION}/current_run.log
+SCRIPT_DIR=/home/cdaq/rcdb/hallcdb/scripts/daq
+RunLogFile=/home/hccoda/coda/cool/${DAQ_SESSION}/ddb/run-log/${Experiment}/current_run.log
 
 if [[ -z "$RCDB_CONNECTION" ]]; then
-    source ${SCRIPT_DIR}/../setup.sh
+    source ${SCRIPT_DIR}/../../setup.sh
 fi    
 
-#python3 ${SCRIPT_DIR}/run_end.py ${RunLogFile} --run=${RunNum}
-#python3 ${SCRIPT_DIR}/run_end.py ${RunLogFile}
+# Run the script
+python ${SCRIPT_DIR}/update.py --run=${RunNum} --daq=${DAQ_SESSION} --logfile=${RunLogFile} --update=coda,epics --reason=end --exp=${Experiment}
+
+# legacy scripts
+#python ${SCRIPT_DIR}/run_end.py ${RunLogFile} --run=${RunNum}
+#python ${SCRIPT_DIR}/run_end.py ${RunLogFile} 

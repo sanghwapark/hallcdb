@@ -1,20 +1,25 @@
 #!/bin/bash
 
-RunNumTemp=$1
+#RunNumTemp=$1
 
 # Quick and dirty way to put correct new run number
 # This is because the new run number doesn't set at the prestart stage
 # while this script is executed at prestart
-RunNum=$(($RunNumTemp +1))
+#RunNum=$(($RunNumTemp +1))
 
+RunNum=$1
 Session=$2
+Experiment=$3
 
-SCRIPT_DIR=/home/cdaq/rcdb/hallcdb/scripts
+SCRIPT_DIR=/home/cdaq/rcdb/hallcdb/scripts/daq
 
 if [[ -z "$RCDB_CONNECTION" ]]; then
-    source ${SCRIPT_DIR}/../setup.sh
+    source ${SCRIPT_DIR}/../../setup.sh
 fi    
 
 # Run the script 
-#python3 ${SCRIPT_DIR}/run_start.py --run=${RunNum} --daq=${Session} --update=epics,coda --reason=start --dist=3.0
+python ${SCRIPT_DIR}/update.py --run=${RunNum} --daq=${Session} --update=epics,coda --reason=start --exp=${Experiment}
+
+# legacy scripts
+#python ${SCRIPT_DIR}/run_start.py --run=${RunNum} --daq=${Session} --update=epics,coda --reason=start
 #python3 ${SCRIPT_DIR}/run_start.py --run=${RunNum} --daq=${Session} --update=epics,coda --reason=start --test=True

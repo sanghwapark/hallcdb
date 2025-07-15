@@ -21,7 +21,6 @@ epics_list = {
     "PWF1I04:spinCalc":HallCconditions.VWIEN,
     "HELFREQ":HallCconditions.HELICITY_FREQ,
     "HMS_Momentum":HallCconditions.HMS_MOMENTUM,
-#    "MNPSSWEEP":HallCconditions.NPS_SWEEPER,
     "IGL1I00OD16_16":HallCconditions.IHWP
 }
 
@@ -92,14 +91,6 @@ def main():
             if epics_result[key] is not None:
                 conditions.append((key, epics_result[key]))
                 
-        # NPS angle (set to SHMS angle for now)
-        #nps_angle_offset = 16.27
-        #nps_angle = float(epics_result["shms_angle"]) - nps_angle_offset
-        #conditions.append(("nps_angle", nps_angle))
-                
-    # add calodistance
-    #conditions.append(("calo_distance", args.dist))
-
     # parse coda info
     if "coda" in update_parts:
         # General daq stuff
@@ -127,26 +118,6 @@ def main():
             db.add_log_record("", 
                               "Start of run: coda parser failed", run_num)
 
-        ## this is for nps parameters
-#        try:
-#            nps_parse_result = parse_nps_param()
-#
-#            if "nps_fadc250_sparsification" in nps_parse_result:
-#                conditions.append(("nps_fadc250_sparsification", nps_parse_result["nps_fadc250_sparsification"]))
-#
-#            if "VTP_NPS_ECALCLUSTER_CLUSTER_READOUT_THR" in nps_parse_result:
-#                conditions.append(("nps_vtp_clus_readout_thr", nps_parse_result["VTP_NPS_ECALCLUSTER_CLUSTER_READOUT_THR"]))
-#
-#            if "VTP_NPS_ECALCLUSTER_CLUSTER_TRIGGER_THR" in nps_parse_result:
-#                conditions.append(("nps_vtp_clus_trigger_thr", nps_parse_result["VTP_NPS_ECALCLUSTER_CLUSTER_TRIGGER_THR"]))
-#
-#            if "VTP_NPS_ECALCLUSTER_CLUSTER_PAIR_TRIGGER_THR" in nps_parse_result:
-#                conditions.append(("nps_vtp_pair_trigger_thr", nps_parse_result["VTP_NPS_ECALCLUSTER_CLUSTER_PAIR_TRIGGER_THR"]))
-#        except Exception as ex:
-#            log.warn("nps parameter parser failed.\n" + str(ex))
-#            db.add_log_record("", 
-#                              "Start of run: nps parser failed", run_num)
-#
     ######  UPDATE  ######
     if args.test:
         print(conditions)
