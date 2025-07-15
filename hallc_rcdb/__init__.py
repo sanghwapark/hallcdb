@@ -20,7 +20,12 @@ class HallCconditions(object):
     HELICITY_FREQ = "helicity_freq"
     FLIP_STATE = "flip_state"
     HMS_MOMENTUM = "hms_momentum"
+    SHMS_MOMENTUM = "shms_momentum"
     NPS_SWEEPER = "nps_sweeper"
+    BLOCKLEVEL = "blocklevel"
+    EDTM_RATE = "edtm_rate"
+    PRESCALES = "prescales"
+    RUN_FLAG = "run_flag"
     
 def create_condition_types(db):
     """
@@ -45,5 +50,16 @@ def create_condition_types(db):
     create_condition_type(HallCconditions.TOTAL_CHARGE, ConditionType.FLOAT_FIELD, "")
     create_condition_type(HallCconditions.HMS_ANGLE, ConditionType.FLOAT_FIELD, "HMS angle in deg")
     create_condition_type(HallCconditions.SHMS_ANGLE, ConditionType.FLOAT_FIELD, "SHMS angle in deg")
-    create_condition_type(HallCconditions.NPS_ANGLE, ConditionType.FLOAT_FIELD, "NPS angle in deg")
+    #create_condition_type(HallCconditions.NPS_ANGLE, ConditionType.FLOAT_FIELD, "NPS angle in deg")
+    create_condition_type(HallCconditions.HWIEN, ConditionType.FLOAT_FIELD, "Horizontal Wien Angle")
+    create_condition_type(HallCconditions.VWIEN, ConditionType.FLOAT_FIELD, "Vertical Wien Angle")
+    create_condition_type(HallCconditions.IHWP, ConditionType.STRING_FIELD, "Insertable half-wave plate In/Out")
+    create_condition_type(HallCconditions.HELICITY_FREQ, ConditionType.FLOAT_FIELD, "Helicity board frequency in Hz")
+    create_condition_type(HallCconditions.FLIP_STATE, ConditionType.STRING_FIELD, "Spin flipper state")
+    create_condition_type(HallCconditions.HMS_MOMENTUM, ConditionType.FLOAT_FIELD, "HMS momentum")
+    create_condition_type(HallCconditions.SHMS_MOMENTUM, ConditionType.FLOAT_FIELD, "SHMS momentum")
+    create_condition_type(HallCconditions.BLOCKLEVEL, ConditionType.INT_FIELD, "readout blocklevel")
+    create_condition_type(HallCconditions.EDTM_RATE, ConditionType.INT_FIELD, "EDTM pulser rate in Hz")
+    create_condition_type(HallCconditions.PRESCALES, ConditionType.JSON_FIELD, "")
+    create_condition_type(HallCconditions.RUN_FLAG, ConditionType.STRING_FIELD, "Run flag for offline analysis (good, bad, suspicious, needcut)")
     #create_condition_type(HallCconditions., ConditionType.STRING_FIELD, "")
