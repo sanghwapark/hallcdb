@@ -18,7 +18,7 @@ def get_run_conds():
 
     # Default run conditions
     epics_list = {
-        "HALLC:p":"beam_current",
+        "HALLC:p":"beam_energy",
         "HALL_C_TARGET":"target",
         "ibcm1":"beam_current",
         "ecSHMS_Angle":"shms_angle",
@@ -27,6 +27,7 @@ def get_run_conds():
         "PWF1I04:spinCalc":"vwien",
         "HELFREQ":"helicity_freq",
         "HMS_Momentum":"hms_momentum",
+        "SHMS_Momentum":"shms_momentum",
         "IGL1I00OD16_16":"ihwp"
     }
     
